@@ -209,8 +209,10 @@ function parseHtmlContent(html: string, limit: number): SlimSearchResult[] {
         if (_index < limit) {
           //Get TopN in each selector
           const $element = $(element);
+          const titleUrl    = extractTitle($element);
           const textContent = extractContent($element);
           results.push({
+            url: titleUrl.url,
             fullContent: textContent.fullContent,
           });
         }
@@ -221,7 +223,6 @@ function parseHtmlContent(html: string, limit: number): SlimSearchResult[] {
   return results;
 }
 
-/*
 function extractTitle(element: cheerio.Cheerio<AnyNode>): {
   title: string;
   url: string;
@@ -259,7 +260,7 @@ function extractTitle(element: cheerio.Cheerio<AnyNode>): {
   }
 
   return { title, url };
-}*/
+}
 
 function extractContent(element: cheerio.Cheerio<AnyNode>): {
   description: string;

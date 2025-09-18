@@ -9,6 +9,7 @@ export interface SearchResult {
 }
 
 export interface SlimSearchResult {
+  url: string;
   fullContent: string;
 }
 
