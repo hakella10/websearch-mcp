@@ -6,6 +6,12 @@ It consists of a Single tool web-search: {query, numResults}
 
 # How to start:
 
+Load chromium browser for playwright. 
+
+`npx playwright install --with-deps chromium`
+
+Run NodeJS project.
+
 `npm run start`
 
 # How to start docker:
