@@ -1,9 +1,11 @@
-# A Simple websearch-mcp using SSE. 
+# A Simple websearch-mcp using SSE.
+
 It is implemented as MCP with SSE with express.
-It uses headless chromium browser from playwright, parsing with cheerio against brave search. 
+It uses headless chromium browser from playwright, parsing with cheerio against brave search.
 It consists of a Single tool web-search: {query, numResults}
 
 # How to start:
+
 `npm run start`
 
 # How to start docker:
@@ -14,7 +16,7 @@ It consists of a Single tool web-search: {query, numResults}
 
 `docker logs webmcp`
 
-# How to access: 
+# How to access:
+
 http://<localhost:9000>/mcp
 PORT can be overridden using the env variable API_PORT. Defaults to 9000
-

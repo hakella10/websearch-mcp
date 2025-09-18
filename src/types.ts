@@ -8,6 +8,10 @@ export interface SearchResult {
   error?: string;
 }
 
+export interface SlimSearchResult {
+  fullContent: string;
+}
+
 export interface SearchOptions {
   query: string;
   numResults?: number;

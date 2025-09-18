@@ -8,7 +8,7 @@ import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import * as z from "zod";
 import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
 import { isInitializeRequest } from "@modelcontextprotocol/sdk/types.js";
-import { SearchOptions, SearchResult } from "./types.js";
+import { SearchOptions, SlimSearchResult } from "./types.js";
 
 const LOGGER_NAME: string = "WEBSEARCH-MCP";
 const transports: { [sessionId: string]: StreamableHTTPServerTransport } = {};
@@ -70,12 +70,10 @@ export async function handleTransportRequest(
       "web-search",
       "Performs a web search, parse the content using cheerio and returns the result",
       {
-        query: z
-          .string()
-          .describe( "Query string to execute. " ),
+        query: z.string().describe("Query string to execute. "),
         numResults: z
           .number()
-          .describe( "Limit number of results. Defaults to 10" )
+          .describe("Limit number of results. Defaults to 10")
           .default(10),
       },
       async (args: unknown) => {
@@ -155,13 +153,13 @@ export async function handleSessionRequest(
 
 async function performWebSearch(
   options: SearchOptions,
-): Promise<SearchResult[]> {
+): Promise<SlimSearchResult[]> {
   log(
     LOGGER_NAME,
     LOGLEVEL.info,
     `Tool call received: web-search ${JSON.stringify(options)}`,
   );
-  let results: SearchResult[] = [];
+  let results: SlimSearchResult[] = [];
 
   //Implement Web Search with Playwright and Cheerio
   const searchUrl = `https://search.brave.com/search?q=${encodeURIComponent(options.query)}&source=web&limit=${options.numResults}`;
@@ -188,8 +186,8 @@ async function performWebSearch(
   return results;
 }
 
-function parseHtmlContent(html: string, limit: number): SearchResult[] {
-  const results: SearchResult[] = [];
+function parseHtmlContent(html: string, limit: number): SlimSearchResult[] {
+  const results: SlimSearchResult[] = [];
   const resultSelectors = [
     '[data-type="web"]', // Main Brave results
     ".result", // Alternative format
@@ -211,15 +209,9 @@ function parseHtmlContent(html: string, limit: number): SearchResult[] {
         if (_index < limit) {
           //Get TopN in each selector
           const $element = $(element);
-          const titleUrl = extractTitle($element);
           const textContent = extractContent($element);
           results.push({
-            title: titleUrl.title,
-            url: titleUrl.url,
-            description: textContent.description,
             fullContent: textContent.fullContent,
-            timestamp: Date().toString(),
-            fetchStatus: "success",
           });
         }
       });
@@ -229,6 +221,7 @@ function parseHtmlContent(html: string, limit: number): SearchResult[] {
   return results;
 }
 
+/*
 function extractTitle(element: cheerio.Cheerio<AnyNode>): {
   title: string;
   url: string;
@@ -266,7 +259,7 @@ function extractTitle(element: cheerio.Cheerio<AnyNode>): {
   }
 
   return { title, url };
-}
+}*/
 
 function extractContent(element: cheerio.Cheerio<AnyNode>): {
   description: string;
