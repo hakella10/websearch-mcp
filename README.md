@@ -1,7 +1,7 @@
 # A Simple websearch-mcp using SSE.
 
-It is implemented as MCP with SSE with express.
-It uses headless chromium browser from playwright, parsing with cheerio against brave search.
+It is implemented as MCP via StreambleHttpTransport using express.
+It uses headless chromium browser from playwright, content parsing with cheerio against brave search.
 It consists of a Single tool web-search: {query, numResults}
 
 # How to start:
